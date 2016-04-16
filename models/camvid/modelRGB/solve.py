@@ -31,20 +31,19 @@ def interp_surgery(net, layers):
 # base net -- follow the editing model parameters example to make
 # a fully convolutional VGG16 net.
 # http://nbviewer.ipython.org/github/BVLC/caffe/blob/master/examples/net_surgery.ipynb
-base_weights = '../VGG16fc.caffemodel'
+base_weights = '../../VGG16fc.caffemodel'
 
 # init
 caffe.set_mode_gpu()
 caffe.set_device(0)
 
 solver = caffe.SGDSolver('solver.prototxt')
+solver.net.copy_from(base_weights)
 
 # do net surgery to set the deconvolution weights for bilinear interpolation
 interp_layers = [k for k in solver.net.params.keys() if 'up' in k]
 interp_surgery(solver.net, interp_layers)
 
-# copy base weights for fine-tuning
-solver.net.copy_from(base_weights)
 
 # solve straight through -- a better approach is to define a solving loop to
 # 1. take SGD steps
