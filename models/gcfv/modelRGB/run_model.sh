@@ -1,13 +1,12 @@
 #!/bin/bash
-#SBATCH -t 99:00:00
+
+#SBATCH --time 4:00:00
 #SBATCH -N 1
-#SBATCH --partition=scavenger
-#SBATCH --mail-user=yixi@cs.umd.edu
-#SBATCH --mail-type=BEGIN
-#SBATCH --mail-type=END
 #SBATCH --gres=gpu
+#SBATCH --partition=gpu
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=6
 
-source /lustre/yixi/decouplednet/DecoupledNet/inference/load_deeplab_dependencies.sh
-source ../../load_deeplab_dependencies.sh
+#source ./load_caffe_dependencies.sh
 
-python ./solve.py
+python ./solve.py > solve.out
