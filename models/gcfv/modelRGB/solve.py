@@ -39,19 +39,11 @@ caffe.set_mode_gpu()
 caffe.set_device(0)
 
 solver = caffe.SGDSolver('solver.prototxt')
+solver.net.copy_from(base_weights)
 
 # do net surgery to set the deconvolution weights for bilinear interpolation
 interp_layers = [k for k in solver.net.params.keys() if 'up' in k]
 interp_surgery(solver.net, interp_layers)
-print '----- yixi initialized params ----'
-layernames = solver.net.params.keys()
-for l in layernames:
-	print 'yixi', l, np.mean(solver.net.params[l][0].data), np.max(solver.net.params[l][0].data), np.mean(solver.net.params[l][0].data)
-
-
-
-# copy base weights for fine-tuning
-solver.net.copy_from(base_weights)
 
 print '----- yixi initialized params ----'
 layernames = solver.net.params.keys()

@@ -553,7 +553,7 @@ layer {
   bottom: "score59"
   top: "upscore2"
   param {
-    lr_mult: 1
+    lr_mult: 0
     decay_mult: 1
   }
   convolution_param {
@@ -600,7 +600,7 @@ layer {
   bottom: "score-fused"
   top: "score4"
   param {
-    lr_mult: 1
+    lr_mult: 0
     decay_mult: 1
   }
   convolution_param {
@@ -647,7 +647,7 @@ layer {
   bottom: "score-final"
   top: "bigscore"
   param {
-    lr_mult: 1
+    lr_mult: 0
   }
   convolution_param {
     num_output: 9
