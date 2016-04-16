@@ -14,5 +14,5 @@ iter_size: 1
 max_iter: 80000
 weight_decay: 0.0010 
 snapshot: 1000
-snapshot_prefix: "snapshots_gcfvshuffle200200/vgg_lr1e-10_w0.0010/"
+snapshot_prefix: "snapshots_gcfv500500/vgg_lr1e-10/"
 test_initialization: true
