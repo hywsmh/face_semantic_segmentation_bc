@@ -10,9 +10,9 @@ base_lr: 1e-10
 # high momentum
 momentum: 0.99
 # no gradient accumulation
-iter_size: 1
+iter_size: 1000
 max_iter: 80000
 weight_decay: 0.0005 
 snapshot: 1000
-snapshot_prefix: "snapshots_camvid500500/train_lr1e-10/"
-test_initialization: false
+snapshot_prefix: "snapshots_camvid500500/fixdeconv_vgg_lr1e-10/"
+test_initialization: true
