@@ -3,9 +3,6 @@
 #convert_to_lmdb.py
 import caffe
 import lmdb
-from PIL import Image
-import numpy as np
-import glob
 from random import shuffle
 import scipy.io as sio
 import scipy
@@ -14,6 +11,16 @@ import os
 import shutil
 import random
 
+from PIL import Image
+
+import numpy as np
+
+import glob
+
+class CArgs(object):
+	pass
+
+#args = CArgs()
 
 
 
