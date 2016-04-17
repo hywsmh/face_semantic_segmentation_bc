@@ -93,9 +93,36 @@ labels = [
 ]
 
 
+def Label2trainId(label_data):
+	# map 225 to 19!
+	id2trainId   = {label.id: label.trainId if label.trainId!=255 else 19 for label in labels}
+	inputs_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_labelIds',''), x) for x in sorted(glob.glob(label_data.format(vid='*', fid='*')))])
+	count = 0
+	for k in inputs_Label:
+		count += 1
+		if count%proc_size!=proc_rank:
+			continue
+		label_path = inputs_Label[k]
+		save_path = label_path.replace('_gtFine_labelIds','_gtFine_trainIds')
+		if os.path.exists(save_path):
+			continue
+		im = np.array(Image.open(label_path), dtype=np.uint8)
+		im = [map(lambda (x): id2trainId[x] , x) for x in im]
+		#print im
+		im = Image.fromarray(np.array(im, dtype=np.uint8))
+		print k, ': save to '+ save_path
+		im.save(save_path)	
 
 if __name__=='__main__':
 	if True:
+		proc_rank = int(sys.argv[1])
+		proc_size = int(sys.argv[2])
+		#Label2trainId('/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/train/{vid}/{vid}_{fid}_gtFine_labelIds.png')
+		Label2trainId('/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/val/{vid}/{vid}_{fid}_gtFine_labelIds.png')
+		Label2trainId('/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/test/{vid}/{vid}_{fid}_gtFine_labelIds.png')
+		
+
+	if False:
 		resize = True
 		RSize = (500, 500)
 		LabelSize = (500, 500)
@@ -129,7 +156,6 @@ if __name__=='__main__':
 		#/scratch/groups/lsdavis/yixi/dataset/cityscape/leftImg8bit/train/aachen/aachen_000000_000019_leftImg8bit.png
 		train_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/leftImg8bit/train/{vid}/{vid}_{fid}_leftImg8bit.png'
 		#/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/train/aachen/aachen_000000_000019_gtFine_labelIds.png
-		train_label_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/train/{vid}/{vid}_{fid}_gtFine_labelIds.png'
 		val_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/leftImg8bit/val/{vid}/{vid}_{fid}_leftImg8bit.png'
 		val_label_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/val/{vid}/{vid}_{fid}_gtFine_labelIds.png'
 		test_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/leftImg8bit/test/{vid}/{vid}_{fid}_leftImg8bit.png'
@@ -146,12 +172,12 @@ if __name__=='__main__':
 		Train_keys = [i for i in inputs_Train.keys() if i in inputs_Train_Label.keys()]
 		shuffle(Train_keys)
 		
-		inputs_Val = dict([(os.path.splitext(os.path.basename(x))[0].replace('_leftImg8bit',''),, x) for x in sorted(glob.glob( val_data.format(vid='*',fid='*')))])
+		inputs_Val = dict([(os.path.splitext(os.path.basename(x))[0].replace('_leftImg8bit',''), x) for x in sorted(glob.glob( val_data.format(vid='*',fid='*')))])
 		inputs_Val_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_labelIds',''), x) for x in sorted(glob.glob( val_label_data.format(vid='*', fid='*')))])
 		Val_keys = [i for i in inputs_Val.keys() if i in inputs_Val_Label.keys()]
 		shuffle(Val_keys)
 		
-		inputs_Test = dict([(os.path.splitext(os.path.basename(x))[0].replace('_leftImg8bit',''),, x) for x in sorted(glob.glob( test_data.format(vid='*',fid='*')))])
+		inputs_Test = dict([(os.path.splitext(os.path.basename(x))[0].replace('_leftImg8bit',''), x) for x in sorted(glob.glob( test_data.format(vid='*',fid='*')))])
 		inputs_Test_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_labelIds',''), x) for x in sorted(glob.glob( test_label_data.format(vid='*', fid='*')))])
 		Test_keys = [i for i in inputs_Test.keys() if i in inputs_Test_Label.keys()]
 		shuffle(Test_keys)
@@ -166,14 +192,12 @@ if __name__=='__main__':
 		flow_y_Test = None if not useflow else dict([(id, test_flow_y.format(id=id)) for id in inputs_Test.keys()])
 
 
-	if os.path.exists(lmdb_dir):
-		shutil.rmtree(lmdb_dir, ignore_errors=True)
-
-	os.makedirs(lmdb_dir)
+	if not os.path.exists(lmdb_dir):
+		os.makedirs(lmdb_dir)
 
 	############################# Creating LMDB for Training Data ##############################
 	print("Creating Training Data LMDB File ..... ")
-	createLMDBImage(os.path.join(lmdb_dir,'train-lmdb'), int(1e13), inputs_Train, flow_x=flow_x_Train, flow_y=flow_y_Train, keys=Train_keys, args=args)
+	#createLMDBImage(os.path.join(lmdb_dir,'train-lmdb'), int(1e13), inputs_Train, flow_x=flow_x_Train, flow_y=flow_y_Train, keys=Train_keys, args=args)
 
 	 
 	############################# Creating LMDB for Training Labels ##############################
