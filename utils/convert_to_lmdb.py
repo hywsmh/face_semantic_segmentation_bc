@@ -123,9 +123,9 @@ def LoadImage(filename, flow_x=None, flow_y=None, resizer=None):
 	# shape channels*width*height, e.g. 3*640*420
 	return im
 
-def createLMDBLabel(dir, mapsize, inputs_Train, flow_x=None, flow_y=None, resize=False, keys=None):
+def createLMDBLabel(dir, mapsize, inputs_Train, flow_x=None, flow_y=None, keys=None, args=None):
 	in_db = lmdb.open(dir, map_size=mapsize)
-	resizer = None if not resize else LabelResizer(LabelSize, BoxSize, nopadding)
+	resizer = None if not resize else LabelResizer(args.LabelSize, args.BoxSize, args.nopadding)
 	with in_db.begin(write=True) as in_txn:
 		for (in_idx, key) in enumerate(keys):
 			in_ = inputs_Train[key]
@@ -137,10 +137,10 @@ def createLMDBLabel(dir, mapsize, inputs_Train, flow_x=None, flow_y=None, resize
 
 
 
-def createLMDBImage(dir, mapsize, inputs_Train, flow_x=None, flow_y=None, resize=False, keys=None):
+def createLMDBImage(dir, mapsize, inputs_Train, flow_x=None, flow_y=None, keys=None, args=None):
 	in_db = lmdb.open(dir, map_size=mapsize)
 	RGB_sum = np.zeros(3 + (flow_x!=None) + (flow_y!=None))
-	resizer = None if not resize else ImageResizer(RSize, BoxSize, nopadding, RGB_pad_values, flow_pad_value)
+	resizer = None if not resize else ImageResizer(args.RSize, args.BoxSize, args.nopadding, args.RGB_pad_values, args.flow_pad_value)
 	with in_db.begin(write=True) as in_txn:
 		for (in_idx, key) in enumerate(keys):
 			print in_idx
@@ -158,6 +158,4 @@ def createLMDBImage(dir, mapsize, inputs_Train, flow_x=None, flow_y=None, resize
 	for i in range(RGB_mean.size):
 		f.write(str(RGB_mean[i]) + ', ')
 	f.close()
-
-
 
