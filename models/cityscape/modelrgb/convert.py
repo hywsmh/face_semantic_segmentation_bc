@@ -140,13 +140,13 @@ if __name__=='__main__':
 		lmdb_dir = 'local_cityscape' + ('rgbmp' if RGB_mean_pad else '') + ('fmp' if flow_mean_pad else '') + str(RSize[0]) + str(RSize[1]) + ('flow' if useflow else '') + ('np' if nopadding else '') + '_lmdb'
 			
 		args = CArgs()
-		args.resize = True
-		args.RSize = (500, 500)
-		args.LabelSize = (500, 500)
-		args.nopadding = False
-		args.useflow = False
-		args.RGB_mean_pad = False
-		args.flow_mean_pad = True
+		args.resize = resize
+		args.RSize = RSize
+		args.LabelSize = LabelSize
+		args.nopadding = nopadding
+		args.useflow = useflow
+		args.RGB_mean_pad = RGB_mean_pad
+		args.flow_mean_pad = flow_mean_pad
 		args.RGB_pad_values = RGB_pad_values
 		args.flow_pad_value = flow_pad_value
 		args.BoxSize = None # None is padding to the square of the longer edge
