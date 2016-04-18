@@ -32,7 +32,8 @@ def interp_surgery(net, layers):
 # a fully convolutional VGG16 net.
 # http://nbviewer.ipython.org/github/BVLC/caffe/blob/master/examples/net_surgery.ipynb
 #base_weights = 'VGG16fc.caffemodel'
-base_weights = '/scratch/groups/lsdavis/yixi/face_ss/models/camvid/modelRGB/snapshots_camvid500500/train_lr1e-10/_iter_12000.caffemodel'
+#base_weights = '/scratch/groups/lsdavis/yixi/face_ss/models/camvid/modelRGB/snapshots_camvid500500/train_lr1e-10/_iter_12000.caffemodel'
+base_weights = 'snapshots_camvid500500/train_lr1e-10_12000_1e-9/_iter_8000.caffemodel'
 
 # init
 caffe.set_mode_gpu()

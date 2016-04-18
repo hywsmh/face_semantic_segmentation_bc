@@ -14,5 +14,5 @@ iter_size: 1
 max_iter: 80000
 weight_decay: 0.0005 
 snapshot: 1000
-snapshot_prefix: "snapshots_camvid500500/train_lr1e-10_12000_1e-9/"
+snapshot_prefix: "snapshots_camvid500500/train_lr1e-10_12000_1e-9_8000/"
 test_initialization: true
