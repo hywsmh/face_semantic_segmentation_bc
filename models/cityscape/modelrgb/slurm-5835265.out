@@ -1,0 +1,11 @@
+Can't locate Slurm.pm in @INC (@INC contains: /home/jcombar1/SLURM/lib64/perl5 /usr/local/lib64/perl5 /usr/local/share/perl5 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5 .) at /home/jcombar1/SLURM/bin/generate_pbs_nodefile line 18.
+BEGIN failed--compilation aborted at /home/jcombar1/SLURM/bin/generate_pbs_nodefile line 18.
+Sun Apr 17 19:43:48 EDT 2016
+compute0006
+/home-4/yixi@umd.edu/work/yixi/face_ss/models/cityscape/modelrgb
+job id:  5835265
+/scratch/groups/lsdavis/yixi/face_ss/models/cityscape/modelrgb
+
+Sun Apr 17 19:43:48 EDT 2016
+total:  0
+Sun Apr 17 19:43:48 EDT 2016

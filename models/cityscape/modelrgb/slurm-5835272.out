@@ -1,0 +1,45 @@
+Sun Apr 17 20:03:21 EDT 2016
+compute0667
+/home-4/yixi@umd.edu/work/yixi/face_ss/models/cityscape/modelrgb
+job id:  5835272
+/scratch/groups/lsdavis/yixi/face_ss/models/cityscape/modelrgb
+
+Sun Apr 17 20:03:21 EDT 2016
+total:  6
+0
+1
+2
+3
+4
+5
+Warning: Permanently added 'compute0671,172.16.12.163' (RSA) to the list of known hosts.
+Warning: Permanently added 'compute0672,172.16.12.164' (RSA) to the list of known hosts.
+Warning: Permanently added 'compute0669,172.16.12.161' (RSA) to the list of known hosts.
+Warning: Permanently added 'compute0670,172.16.12.162' (RSA) to the list of known hosts.
+Warning: Permanently added 'compute0668,172.16.12.160' (RSA) to the list of known hosts.
+Warning: Permanently added 'compute0667,172.16.12.159' (RSA) to the list of known hosts.
+Traceback (most recent call last):
+  File "convert.py", line 172, in <module>
+    inputs_Train_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_trainIds',''), x) for x in sorted(glob.glob( train_label_data.format(vid='*', fid='*')))])
+NameError: name 'train_label_data' is not defined
+Traceback (most recent call last):
+  File "convert.py", line 172, in <module>
+    inputs_Train_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_trainIds',''), x) for x in sorted(glob.glob( train_label_data.format(vid='*', fid='*')))])
+NameError: name 'train_label_data' is not defined
+Traceback (most recent call last):
+  File "convert.py", line 172, in <module>
+    inputs_Train_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_trainIds',''), x) for x in sorted(glob.glob( train_label_data.format(vid='*', fid='*')))])
+NameError: name 'train_label_data' is not defined
+Traceback (most recent call last):
+  File "convert.py", line 172, in <module>
+    inputs_Train_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_trainIds',''), x) for x in sorted(glob.glob( train_label_data.format(vid='*', fid='*')))])
+NameError: name 'train_label_data' is not defined
+Traceback (most recent call last):
+  File "convert.py", line 172, in <module>
+    inputs_Train_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_trainIds',''), x) for x in sorted(glob.glob( train_label_data.format(vid='*', fid='*')))])
+NameError: name 'train_label_data' is not defined
+Traceback (most recent call last):
+  File "convert.py", line 172, in <module>
+    inputs_Train_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_trainIds',''), x) for x in sorted(glob.glob( train_label_data.format(vid='*', fid='*')))])
+NameError: name 'train_label_data' is not defined
+Sun Apr 17 20:03:28 EDT 2016

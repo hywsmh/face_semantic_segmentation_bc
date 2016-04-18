@@ -1,14 +1,15 @@
 #!/bin/bash
 #SBATCH -t 10:00:00
-#SBATCH --nodes=40
-#SBATCH --ntasks-per-node=8
-#SBATCH --partition=scavenger
-#SBATCH --qos=scavenger
+#SBATCH --nodes=1
 #SBATCH --mail-user=yixi@cs.umd.edu
 #SBATCH --mail-type=BEGIN
 #SBATCH --mail-type=END
 
 
+python convert.py >convert.out
+
+: <<'END'
+#SBATCH --partition=gpu
 #export PBS_NODEFILE=`/home/jcombar1/SLURM/bin/generate_pbs_nodefile`
 export PBS_NODEFILE=`generate_pbs_nodefile`
 
@@ -32,5 +33,5 @@ for node in `cat $PBS_NODEFILE`; do
 done
 wait
 date
-
+END
 

@@ -114,15 +114,16 @@ def Label2trainId(label_data):
 		im.save(save_path)	
 
 if __name__=='__main__':
-	if True:
+	if False:
 		proc_rank = int(sys.argv[1])
 		proc_size = int(sys.argv[2])
-		#Label2trainId('/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/train/{vid}/{vid}_{fid}_gtFine_labelIds.png')
+		Label2trainId('/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/train/{vid}/{vid}_{fid}_gtFine_labelIds.png')
 		Label2trainId('/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/val/{vid}/{vid}_{fid}_gtFine_labelIds.png')
 		Label2trainId('/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/test/{vid}/{vid}_{fid}_gtFine_labelIds.png')
 		
 
-	if False:
+	if True:
+		print 'convert to lmdb begins....\n'
 		resize = True
 		RSize = (500, 500)
 		LabelSize = (500, 500)
@@ -132,10 +133,11 @@ if __name__=='__main__':
 		flow_mean_pad = True
 		# Default is RGB_mean_pad = False and flow_mean_pad = True
 		
-		RGB_pad_values = [121.364250092, 126.289872692, 124.244447077] if RGB_mean_pad else [0,0,0]
+		RGB_pad_values = [] if RGB_mean_pad else [0,0,0]
 		flow_pad_value = 128 if flow_mean_pad else 0
 
-		lmdb_dir = 'cityscape' + ('rgbmp' if RGB_mean_pad else '') + ('fmp' if flow_mean_pad else '') + str(RSize[0]) + str(RSize[1]) + ('flow' if useflow else '') + ('np' if nopadding else '') + '_lmdb'
+
+		lmdb_dir = 'local_cityscape' + ('rgbmp' if RGB_mean_pad else '') + ('fmp' if flow_mean_pad else '') + str(RSize[0]) + str(RSize[1]) + ('flow' if useflow else '') + ('np' if nopadding else '') + '_lmdb'
 			
 		args = CArgs()
 		args.resize = True
@@ -148,18 +150,21 @@ if __name__=='__main__':
 		args.RGB_pad_values = RGB_pad_values
 		args.flow_pad_value = flow_pad_value
 		args.BoxSize = None # None is padding to the square of the longer edge
-		args.NumLabels = 34 # [0,33]
-		args.BackGroundLabel = 34
+		args.NumLabels = 19 # [0,19]
+		args.BackGroundLabel = 20
 		args.lmdb_dir = lmdb_dir
+		#args.proc_rank = proc_rank
+		#args.proc_size = proc_size		
 
 
 		#/scratch/groups/lsdavis/yixi/dataset/cityscape/leftImg8bit/train/aachen/aachen_000000_000019_leftImg8bit.png
 		train_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/leftImg8bit/train/{vid}/{vid}_{fid}_leftImg8bit.png'
 		#/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/train/aachen/aachen_000000_000019_gtFine_labelIds.png
+		train_label_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/train/{vid}/{vid}_{fid}_gtFine_trainIds.png'
 		val_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/leftImg8bit/val/{vid}/{vid}_{fid}_leftImg8bit.png'
-		val_label_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/val/{vid}/{vid}_{fid}_gtFine_labelIds.png'
+		val_label_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/val/{vid}/{vid}_{fid}_gtFine_trainIds.png'
 		test_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/leftImg8bit/test/{vid}/{vid}_{fid}_leftImg8bit.png'
-		test_label_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/test/{vid}/{vid}_{fid}_gtFine_labelIds.png'
+		test_label_data = '/scratch/groups/lsdavis/yixi/dataset/cityscape/gtFine/test/{vid}/{vid}_{fid}_gtFine_trainIds.png'
 		
 		#train_flow_x = '/lustre/yixi/data/gcfv_dataset/cross_validation/videos/flow/{id}.flow_x.png'
 		#train_flow_y = '/lustre/yixi/data/gcfv_dataset/cross_validation/videos/flow/{id}.flow_y.png'
@@ -168,19 +173,19 @@ if __name__=='__main__':
 
 	
 		inputs_Train = dict([(os.path.splitext(os.path.basename(x))[0].replace('_leftImg8bit',''), x) for x in sorted(glob.glob( train_data.format(vid='*',fid='*')))])
-		inputs_Train_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_labelIds',''), x) for x in sorted(glob.glob( train_label_data.format(vid='*', fid='*')))])
+		inputs_Train_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_trainIds',''), x) for x in sorted(glob.glob( train_label_data.format(vid='*', fid='*')))])
 		Train_keys = [i for i in inputs_Train.keys() if i in inputs_Train_Label.keys()]
-		shuffle(Train_keys)
+		shuffle(Train_keys, lambda: 0.5)
 		
 		inputs_Val = dict([(os.path.splitext(os.path.basename(x))[0].replace('_leftImg8bit',''), x) for x in sorted(glob.glob( val_data.format(vid='*',fid='*')))])
-		inputs_Val_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_labelIds',''), x) for x in sorted(glob.glob( val_label_data.format(vid='*', fid='*')))])
+		inputs_Val_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_trainIds',''), x) for x in sorted(glob.glob( val_label_data.format(vid='*', fid='*')))])
 		Val_keys = [i for i in inputs_Val.keys() if i in inputs_Val_Label.keys()]
-		shuffle(Val_keys)
+		shuffle(Val_keys, lambda: 0.1)
 		
 		inputs_Test = dict([(os.path.splitext(os.path.basename(x))[0].replace('_leftImg8bit',''), x) for x in sorted(glob.glob( test_data.format(vid='*',fid='*')))])
-		inputs_Test_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_labelIds',''), x) for x in sorted(glob.glob( test_label_data.format(vid='*', fid='*')))])
+		inputs_Test_Label = dict([(os.path.splitext(os.path.basename(x))[0].replace('_gtFine_trainIds',''), x) for x in sorted(glob.glob( test_label_data.format(vid='*', fid='*')))])
 		Test_keys = [i for i in inputs_Test.keys() if i in inputs_Test_Label.keys()]
-		shuffle(Test_keys)
+		shuffle(Test_keys, lambda: 0.8)
 		
 
 
@@ -192,35 +197,38 @@ if __name__=='__main__':
 		flow_y_Test = None if not useflow else dict([(id, test_flow_y.format(id=id)) for id in inputs_Test.keys()])
 
 
-	if not os.path.exists(lmdb_dir):
-		os.makedirs(lmdb_dir)
+		if os.path.exists(lmdb_dir):
+			shutil.rmtree(lmdb_dir, ignore_errors=True)
 
-	############################# Creating LMDB for Training Data ##############################
-	print("Creating Training Data LMDB File ..... ")
-	#createLMDBImage(os.path.join(lmdb_dir,'train-lmdb'), int(1e13), inputs_Train, flow_x=flow_x_Train, flow_y=flow_y_Train, keys=Train_keys, args=args)
+		if not os.path.exists(lmdb_dir):
+			os.makedirs(lmdb_dir)
 
-	 
-	############################# Creating LMDB for Training Labels ##############################
-	print("Creating Training Label LMDB File ..... ")
-	createLMDBLabel(os.path.join(lmdb_dir,'train-label-lmdb'), int(1e12), inputs_Train_Label, keys=Train_keys, args=args)
+		############################# Creating LMDB for Training Data ##############################
+		print("Creating Training Data LMDB File ..... ")
+		createLMDBImage(os.path.join(lmdb_dir,'train-lmdb'), int(1e13), inputs_Train, flow_x=flow_x_Train, flow_y=flow_y_Train, keys=Train_keys, args=args)
 
-	
-	############################# Creating LMDB for Validation Data ##############################
-	print("Creating Validation Data LMDB File ..... ")
-	createLMDBImage(os.path.join(lmdb_dir,'val-lmdb'), int(1e13), inputs_Val, flow_x=flow_x_Val, flow_y=flow_y_Val, keys=Val_keys, args=args)
+		 
+		############################# Creating LMDB for Training Labels ##############################
+		print("Creating Training Label LMDB File ..... ")
+		createLMDBLabel(os.path.join(lmdb_dir,'train-label-lmdb'), int(1e12), inputs_Train_Label, keys=Train_keys, args=args)
 
-	 
-	############################# Creating LMDB for Validation Labels ##############################
-	print("Creating Validation Label LMDB File ..... ")
-	createLMDBLabel(os.path.join(lmdb_dir,'val-label-lmdb'), int(1e12), inputs_Val_Label, keys=Val_keys, args=args)
+		
+		############################# Creating LMDB for Validation Data ##############################
+		print("Creating Validation Data LMDB File ..... ")
+		createLMDBImage(os.path.join(lmdb_dir,'val-lmdb'), int(1e13), inputs_Val, flow_x=flow_x_Val, flow_y=flow_y_Val, keys=Val_keys, args=args)
 
-
-	############################# Creating LMDB for Testing Data ##############################
-	print("Creating Testing Data LMDB File ..... ")
-	createLMDBImage(os.path.join(lmdb_dir,'test-lmdb'), int(1e13), inputs_Test, flow_x=flow_x_Test, flow_y=flow_y_Test, keys=Test_keys, args=args)
+		 
+		############################# Creating LMDB for Validation Labels ##############################
+		print("Creating Validation Label LMDB File ..... ")
+		createLMDBLabel(os.path.join(lmdb_dir,'val-label-lmdb'), int(1e12), inputs_Val_Label, keys=Val_keys, args=args)
 
 
-	############################# Creating LMDB for Testing Labels ##############################
-	print("Creating Testing Label LMDB File ..... ")
-	createLMDBLabel(os.path.join(lmdb_dir,'test-label-lmdb'), int(1e12), inputs_Test_Label, keys=Test_keys, args=args)
+		############################# Creating LMDB for Testing Data ##############################
+		print("Creating Testing Data LMDB File ..... ")
+		createLMDBImage(os.path.join(lmdb_dir,'test-lmdb'), int(1e13), inputs_Test, flow_x=flow_x_Test, flow_y=flow_y_Test, keys=Test_keys, args=args)
+
+
+		############################# Creating LMDB for Testing Labels ##############################
+		print("Creating Testing Label LMDB File ..... ")
+		createLMDBLabel(os.path.join(lmdb_dir,'test-label-lmdb'), int(1e12), inputs_Test_Label, keys=Test_keys, args=args)
 

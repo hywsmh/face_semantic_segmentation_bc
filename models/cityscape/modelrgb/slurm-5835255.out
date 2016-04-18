@@ -1,0 +1,10 @@
+/cm/local/apps/slurm/var/spool/job5835255/slurm_script: line 12: /usr/local/slurm/bin/generate_pbs_nodefile: No such file or directory
+Sun Apr 17 19:11:23 EDT 2016
+compute0018
+/home-4/yixi@umd.edu/work/yixi/face_ss/models/cityscape/modelrgb
+job id:  5835255
+/scratch/groups/lsdavis/yixi/face_ss/models/cityscape/modelrgb
+
+Sun Apr 17 19:11:23 EDT 2016
+total:  0
+Sun Apr 17 19:11:23 EDT 2016
