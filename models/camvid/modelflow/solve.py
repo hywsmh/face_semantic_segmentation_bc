@@ -56,4 +56,4 @@ for l in  solver.net.params.keys():
 # 1. take SGD steps
 # 2. score the model by the test net `solver.test_nets[0]`
 # 3. repeat until satisfied
-#solver.step(80000)
+solver.step(80000)
