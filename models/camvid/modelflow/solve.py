@@ -45,9 +45,15 @@ solver.net.copy_from(base_weights)
 #interp_layers = [k for k in solver.net.params.keys() if 'up' in k]
 #interp_surgery(solver.net, interp_layers)
 
+for l in  solver.net.params.keys():
+	print 'yixi', l, np.mean(solver.net.params[l][0].data), np.max(solver.net.params[l][0].data), np.mean(solver.net.params[l][0].data)
+
+
+
+
 
 # solve straight through -- a better approach is to define a solving loop to
 # 1. take SGD steps
 # 2. score the model by the test net `solver.test_nets[0]`
 # 3. repeat until satisfied
-solver.step(80000)
+#solver.step(80000)
