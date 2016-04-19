@@ -34,7 +34,8 @@ def interp_surgery(net, layers):
 #base_weights = 'VGG16fc.caffemodel'
 #base_weights = '/scratch/groups/lsdavis/yixi/face_ss/models/camvid/modelRGB/snapshots_camvid500500/train_lr1e-10/_iter_12000.caffemodel'
 #base_weights = 'snapshots_camvid500500/train_lr1e-10_12000_1e-9/_iter_8000.caffemodel'
-base_weights = 'snapshots_camvid500500/train_lr1e-10_12000_1e-9_8000/_iter_9000.caffemodel'
+#base_weights = 'snapshots_camvid500500/train_lr1e-10_12000_1e-9_8000/_iter_9000.caffemodel'
+base_weights = 'snapshots_camvid500500/train_lr1e-10_12000_1e-9_8000_9000_1e-10/_iter_30000.caffemodel'
 
 # init
 caffe.set_mode_gpu()
